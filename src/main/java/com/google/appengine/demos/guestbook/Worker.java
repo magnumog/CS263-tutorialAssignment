@@ -3,6 +3,7 @@ package com.google.appengine.demos.guestbook;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,26 +17,23 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
-public class SignGuestbookServlet extends HttpServlet {
+public class Worker extends HttpServlet {
 	
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		UserService userService = UserServiceFactory.getUserService();
-		User user = userService.getCurrentUser();
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		String key = req.getParameter("Key");
+		Key guestbookKey = KeyFactory.createKey("Guestbook",key);
+		String param = req.getParameter("param");
 		
-		String guestbookName = req.getParameter("guestbookName");
-		Key guestbookKey = KeyFactory.createKey("Guestbook",guestbookName);
-		String content = req.getParameter("content");
 		Date date = new Date();
-		Entity greeting = new Entity("Greeting", guestbookKey);
-		greeting.setProperty("user",user);
-		greeting.setProperty("date", date);
-		greeting.setProperty("content",content);
+		Entity store = new Entity("Key",guestbookKey);
+		store.setProperty("value", param);
+		store.setProperty("date", date);
 		
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		datastore.put(greeting);
+		datastore.put(store);
 		
-		resp.sendRedirect("/guestbook.jsp?guestbookName=" + guestbookName);
+		
+//		resp.sendRedirect("/done.html");
 		
 	}
-
 }
