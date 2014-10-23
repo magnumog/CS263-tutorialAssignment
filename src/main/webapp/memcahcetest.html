@@ -1,0 +1,21 @@
+<html>
+<head>
+	<title>Try the memcache</title>
+</head>
+<body>
+	<p>Test the memcache</p>
+	<p>Step 1: try to find something in memcache or datastore</p>
+	<p>Step 2: you will not find it in memcache or datastore</p>
+	<p>Step 3: Try step 1 again with same key</p>
+	<p>step 4: You should now find the key and value in datastore but not in memcache</p>
+	<p>step 5: Try step 1 again with same key</p>
+	<p>The key and value should now be in the memcache
+	
+	<form action="/memcache" method="post">
+		<input type="text" name="key">
+		<input type="text" name="value">
+		<input type="submit">
+	</form>
+
+</body>
+

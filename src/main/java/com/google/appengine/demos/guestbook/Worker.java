@@ -19,21 +19,21 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 public class Worker extends HttpServlet {
 	
+	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-		String key = req.getParameter("Key");
-		Key guestbookKey = KeyFactory.createKey("Guestbook",key);
-		String param = req.getParameter("param");
-		
+		String key = req.getParameter("key");
+		String value = req.getParameter("value");
+		Key workKey = KeyFactory.createKey("Work", key);
 		Date date = new Date();
-		Entity store = new Entity("Key",guestbookKey);
-		store.setProperty("value", param);
-		store.setProperty("date", date);
-		
+		Entity work = new Entity(workKey);
+		work.setProperty("key", key);
+		work.setProperty("date", date);
+		work.setProperty("value", value);
+
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		datastore.put(store);
+		datastore.put(work);
 		
-		
-//		resp.sendRedirect("/done.html");
+		resp.sendRedirect("/work.jsp");
 		
 	}
 }
